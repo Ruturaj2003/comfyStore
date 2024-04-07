@@ -1,6 +1,6 @@
 const SubmitBtn = ({ text }) => {
   return (
-    <button className="btn btn-primary" type="submit">
+    <button className="btn w-full btn-primary" type="submit">
       {text}
     </button>
   );
