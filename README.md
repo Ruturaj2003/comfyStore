@@ -1,368 +1,3 @@
-## Useful Project Resources
-
-- [Complete Project](https://react-vite-comfy-store-v2.netlify.app/)
-- [API DOCS](https://documenter.getpostman.com/view/18152321/2s9Xy5KpTi)
-
-## IMPORTANT !!!
-
-Try to work on one challenge at a time and observe my solution.
-This approach will make it easier later to identify any potential bugs.
-
-## Challenge (1) - Setup
-
-- create vite project with tailwind
-
-## Solution (1) - Setup Vite and Tailwind
-
-[Tailwind Docs](https://tailwindcss.com/docs/guides/vite)
-
-- setup vite project
-
-```sh
-npm create vite@latest comfy-store -- --template react
-cd comfy-store
-```
-
-- add tailwind
-
-```sh
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-- rename to tailwind.config.cjs
-- add following content
-
-tailwind.config.cjs
-
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-```
-
-- remove App.css
-- delete contents of index.css
-- delete contents of App.jsx
-- change title
-
-```js
-const App = () => {
-  return <div>App</div>;
-};
-export default App;
-```
-
-- Add the Tailwind directives to your CSS
-
-index.css
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-Tailwind directives are instructions that decide how Tailwind CSS creates the styles for your website. They control the global styles, component styles, and utility classes.
-
-- start the project "npm run dev"
-- setup first tailwind classes in App.jsx
-- remove StrictMode
-
-  App.jsx
-
-```js
-const App = () => {
-  return <h1 className='text-7xl font-bold underline'>Tailwind project</h1>;
-};
-export default App;
-```
-
-## Assets
-
-- get project assets
-
-## Challenge (2) - Setup DaisyUI
-
-- [DaisyUI](https://daisyui.com/)
-
-- add and configure daisyui to our project
-- add TailwindCSS Typography plugin
-
-## Solution (2) - Setup DaisyUI
-
-[DaisyUI](https://daisyui.com/)
-
-```sh
-npm i  -D daisyui@latest @tailwindcss/typography
-```
-
-tailwind.config.js
-
-```js
-{
- plugins: [require('@tailwindcss/typography'), require('daisyui')],
-}
-```
-
-## Install All Libraries
-
-```sh
-npm i axios@1.4.0 dayjs@1.11.9 @reduxjs/toolkit@1.9.5 @tanstack/react-query@4.32.6 @tanstack/react-query-devtools@4.32.6 react-icons@4.10.1 react-redux@8.1.2 react-router-dom@6.14.2 react-toastify@9.1.3
-
-```
-
-## Challenge (3) - Create All Pages
-
-- create pages directory
-- create all pages and export from index.js
-- About, Cart, Checkout, Error,
-  HomeLayout, Landing, Login, Orders,
-  Products, Register, SingleProduct
-- import in app.jsx
-
-## Solution (3) - Create All Pages
-
-pages/About.jsx
-
-```js
-const About = () => {
-  return <h1 className='text-4xl'>About</h1>;
-};
-export default About;
-```
-
-pages/index.js
-
-```js
-export { default as HomeLayout } from './HomeLayout';
-export { default as Landing } from './Landing';
-export { default as SingleProduct } from './SingleProduct';
-export { default as Products } from './Products';
-export { default as Cart } from './Cart';
-export { default as Error } from './Error';
-export { default as About } from './About';
-export { default as Login } from './Login';
-export { default as Register } from './Register';
-export { default as Checkout } from './Checkout';
-export { default as Orders } from './Orders';
-```
-
-App.jsx
-
-```js
-import {
-  HomeLayout,
-  Landing,
-  Error,
-  Products,
-  SingleProduct,
-  Cart,
-  About,
-  Register,
-  Login,
-  Checkout,
-  Orders,
-} from './pages';
-```
-
-## Challenge (4) - React Router
-
-- configure react router
-- setup initial route structure
-  hint : look for nested UI (basically navbar)
-
-### App.jsx
-
-1. Import Dependencies:
-
-   - Import necessary modules from the 'react-router-dom' library.
-
-2. Create Router Configuration:
-
-   - Use the `createBrowserRouter` function to set up a router configuration.
-   - Define an array of route objects, each representing a different route in your application.
-   - Configure routes for different paths, including components like `HomeLayout`, `Landing`, `Products`, etc.
-
-3. Create Router Instance:
-
-   - Create a router instance using the `createBrowserRouter` function and pass in the defined route configuration.
-
-4. Define App Component:
-
-   - Create a functional component named `App`.
-   - Return a `RouterProvider` component and pass in the created router instance as a prop.
-
-5. Export App Component:
-   - Export the `App` component as the default export of the module.
-
-## Solution (4) - React Router
-
-App.jsx
-
-```js
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeLayout />,
-    errorElement: <Error />,
-    children: [
-      {
-        index: true,
-        element: <Landing />,
-      },
-      {
-        path: 'products',
-        element: <Products />,
-      },
-      {
-        path: 'products/:id',
-        element: <SingleProduct />,
-      },
-      {
-        path: 'cart',
-        element: <Cart />,
-      },
-      { path: 'about', element: <About /> },
-      {
-        path: 'checkout',
-        element: <Checkout />,
-      },
-      {
-        path: 'orders',
-        element: <Orders />,
-      },
-    ],
-  },
-  {
-    path: '/login',
-    element: <Login />,
-    errorElement: <Error />,
-  },
-  {
-    path: '/register',
-    element: <Register />,
-    errorElement: <Error />,
-  },
-]);
-
-const App = () => {
-  return <RouterProvider router={router} />;
-};
-export default App;
-```
-
-HomeLayout.jsx
-
-```js
-import { Outlet } from 'react-router-dom';
-
-const HomeLayout = () => {
-  return (
-    <>
-      <nav>
-        <span className='text-4xl text-primary'>Comfy</span>
-      </nav>
-      <Outlet />
-    </>
-  );
-};
-export default HomeLayout;
-```
-
-## Challenge (5) - Error Page
-
-- complete error page
-- create two returns
-- first for 404 errors
-- second for all other errors
-- log the error
-- add option to navigate home
-
-### Error.jsx
-
-1. Import Dependencies:
-
-   - Import the necessary modules `useRouteError` and `Link` from the 'react-router-dom' library.
-
-2. Create Error Component:
-
-   - Define a functional component named `Error`.
-   - Inside the component, use the `useRouteError` hook to get information about the route error.
-   - Check the status of the error using `error.status`.
-
-3. Conditional Rendering for 404 Error:
-
-   - If the error status is 404, render a `main` element with a grid layout and centered content.
-   - Display a large "404" text, a title "Page not found," and a description.
-   - Include a link back to the home page using the `Link` component.
-
-4. Conditional Rendering for Other Errors:
-
-   - If the error status is not 404, render a `main` element with a grid layout and centered content.
-   - Display a text message indicating that there was an error.
-
-5. Export Error Component:
-   - Export the `Error` component as the default export of the module.
-
-## Solution (5) - Error Page
-
-Error.jsx
-
-```js
-import { useRouteError, Link } from 'react-router-dom';
-const Error = () => {
-  const error = useRouteError();
-  console.log(error);
-  if (error.status === 404)
-    return (
-      <main className='grid min-h-[100vh] place-items-center px-8 '>
-        <div className='text-center'>
-          <p className='text-9xl font-semibold text-primary'>404</p>
-          <h1 className='mt-4 text-3xl font-bold tracking-tight sm:text-5xl'>
-            Page not found
-          </h1>
-          <p className='mt-6 text-lg leading-7 '>
-            Sorry, we couldn’t find the page you’re looking for.
-          </p>
-          <div className='mt-10 '>
-            <Link to='/' className='btn btn-secondary'>
-              Go back home
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-
-  return (
-    <main className='grid min-h-[100vh] place-items-center px-8 '>
-      <h4 className='text-center font-bold text-4xl'>there was an error... </h4>
-    </main>
-  );
-};
-export default Error;
-```
-
-## Challenge (6) - Input Field Component
-
-- create components folder with index.js
-- in daisyui
-- find Text input component
-- more specifically "With form-control and labels"
-- set it as component (in my case FormInput.jsx)
-- decide on props
-- export from index.js
-- test in login
-
-### FormInput.jsx
-
 1. Create FormInput Component:
 
    - Define a functional component named `FormInput`.
@@ -398,15 +33,15 @@ FormInput.jsx
 ```js
 const FormInput = ({ label, name, type, defaultValue }) => {
   return (
-    <div className='form-control '>
-      <label className='label'>
-        <span className='label-text capitalize'>{label}</span>
+    <div className="form-control ">
+      <label className="label">
+        <span className="label-text capitalize">{label}</span>
       </label>
       <input
         type={type}
         name={name}
         defaultValue={defaultValue}
-        className='input input-bordered '
+        className="input input-bordered "
       />
     </div>
   );
@@ -502,35 +137,35 @@ import { Form, Link } from 'react-router-dom';
 
 const Login = () => {
   return (
-    <section className='h-screen grid place-items-center'>
+    <section className="h-screen grid place-items-center">
       <Form
-        method='post'
-        className='card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4'
+        method="post"
+        className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
       >
-        <h4 className='text-center text-3xl font-bold'>Login</h4>
+        <h4 className="text-center text-3xl font-bold">Login</h4>
         <FormInput
-          type='email'
-          label='email'
-          name='identifier'
-          defaultValue='test@test.com'
+          type="email"
+          label="email"
+          name="identifier"
+          defaultValue="test@test.com"
         />
         <FormInput
-          type='password'
-          label='password'
-          name='password'
-          defaultValue='secret'
+          type="password"
+          label="password"
+          name="password"
+          defaultValue="secret"
         />
-        <div className='mt-4'>
-          <SubmitBtn text='login' />
+        <div className="mt-4">
+          <SubmitBtn text="login" />
         </div>
-        <button type='button' className='btn btn-secondary btn-block'>
+        <button type="button" className="btn btn-secondary btn-block">
           guest user
         </button>
-        <p className='text-center'>
+        <p className="text-center">
           Not a member yet?
           <Link
-            to='/register'
-            className='ml-2 link link-hover link-primary capitalize'
+            to="/register"
+            className="ml-2 link link-hover link-primary capitalize"
           >
             register
           </Link>
@@ -551,13 +186,13 @@ const SubmitBtn = ({ text }) => {
   const isSubmitting = navigation.state === 'submitting';
   return (
     <button
-      type='submit'
-      className='btn btn-primary btn-block'
+      type="submit"
+      className="btn btn-primary btn-block"
       disabled={isSubmitting}
     >
       {isSubmitting ? (
         <>
-          <span className='loading loading-spinner'></span>
+          <span className="loading loading-spinner"></span>
           sending...
         </>
       ) : (
@@ -620,24 +255,24 @@ import { Form, Link } from 'react-router-dom';
 
 const Register = () => {
   return (
-    <section className='h-screen grid place-items-center'>
+    <section className="h-screen grid place-items-center">
       <Form
-        method='POST'
-        className='card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4'
+        method="POST"
+        className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
       >
-        <h4 className='text-center text-3xl font-bold'>Register</h4>
-        <FormInput type='text' label='username' name='username' />
-        <FormInput type='email' label='email' name='email' />
-        <FormInput type='password' label='password' name='password' />
-        <div className='mt-4'>
-          <SubmitBtn text='register' />
+        <h4 className="text-center text-3xl font-bold">Register</h4>
+        <FormInput type="text" label="username" name="username" />
+        <FormInput type="email" label="email" name="email" />
+        <FormInput type="password" label="password" name="password" />
+        <div className="mt-4">
+          <SubmitBtn text="register" />
         </div>
 
-        <p className='text-center'>
+        <p className="text-center">
           Already a member?
           <Link
-            to='/login'
-            className='ml-2 link link-hover link-primary capitalize'
+            to="/login"
+            className="ml-2 link link-hover link-primary capitalize"
           >
             login
           </Link>
@@ -668,7 +303,7 @@ index.css
 ```
 
 ```js
-<section className='align-element py-20'>
+<section className="align-element py-20">
   <Outlet />
 </section>
 ```
@@ -712,15 +347,15 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <header className=' bg-neutral py-2 text-neutral-content '>
-      <div className='align-element flex justify-center sm:justify-end '>
+    <header className=" bg-neutral py-2 text-neutral-content ">
+      <div className="align-element flex justify-center sm:justify-end ">
         {/* USER */}
         {/* LINKS */}
-        <div className='flex gap-x-6 justify-center items-center'>
-          <Link to='/login' className='link link-hover text-xs sm:text-sm'>
+        <div className="flex gap-x-6 justify-center items-center">
+          <Link to="/login" className="link link-hover text-xs sm:text-sm">
             Sign in / Guest
           </Link>
-          <Link to='/register' className='link link-hover text-xs sm:text-sm'>
+          <Link to="/register" className="link link-hover text-xs sm:text-sm">
             Create an Account
           </Link>
         </div>
@@ -792,39 +427,39 @@ import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className='bg-base-200'>
-      <div className='navbar align-element '>
-        <div className='navbar-start'>
+    <nav className="bg-base-200">
+      <div className="navbar align-element ">
+        <div className="navbar-start">
           {/* Title */}
           <NavLink
-            to='/'
-            className='hidden lg:flex btn btn-primary text-3xl items-center '
+            to="/"
+            className="hidden lg:flex btn btn-primary text-3xl items-center "
           >
             C
           </NavLink>
           {/* DROPDOWN */}
-          <div className='dropdown'>
-            <label tabIndex={0} className='btn btn-ghost lg:hidden'>
-              <FaBarsStaggered className='h-6 w-6' />
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <FaBarsStaggered className="h-6 w-6" />
             </label>
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52'
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52"
             >
               nav links
             </ul>
           </div>
         </div>
-        <div className='navbar-center hidden lg:flex'>
-          <ul className='menu menu-horizontal '>nav links</ul>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal ">nav links</ul>
         </div>
-        <div className='navbar-end'>
+        <div className="navbar-end">
           {/* THEME ICONS */}
           {/* CART LINK*/}
-          <NavLink to='cart' className='btn btn-ghost btn-circle btn-md ml-4'>
-            <div className='indicator'>
-              <BsCart3 className='h-6 w-6' />
-              <span className='badge badge-sm badge-primary indicator-item'>
+          <NavLink to="cart" className="btn btn-ghost btn-circle btn-md ml-4">
+            <div className="indicator">
+              <BsCart3 className="h-6 w-6" />
+              <span className="badge badge-sm badge-primary indicator-item">
                 8
               </span>
             </div>
@@ -891,7 +526,7 @@ const NavLinks = () => {
         const { id, url, text } = link;
         return (
           <li key={id}>
-            <NavLink className='capitalize' to={url}>
+            <NavLink className="capitalize" to={url}>
               {text}
             </NavLink>
           </li>
@@ -917,16 +552,16 @@ const [theme, setTheme] = useState(false);
 const handleTheme = () => {
   setTheme(!theme);
 };
-<div className='navbar-end'>
-  <label className='swap swap-rotate '>
+<div className="navbar-end">
+  <label className="swap swap-rotate ">
     {/* this hidden checkbox controls the state */}
-    <input type='checkbox' onChange={handleTheme} />
+    <input type="checkbox" onChange={handleTheme} />
 
     {/* sun icon */}
-    <BsSunFill className='swap-on h-4 w-4' />
+    <BsSunFill className="swap-on h-4 w-4" />
 
     {/* moon icon */}
-    <BsMoonFill className='swap-off h-4 w-4' />
+    <BsMoonFill className="swap-off h-4 w-4" />
   </label>
 </div>;
 ```
@@ -1033,19 +668,19 @@ const Navbar = () => {
 const About = () => {
   return (
     <>
-      <div className='flex flex-wrap gap-2 sm:gap-x-6 items-center justify-center'>
-        <h1 className='text-4xl font-bold leading-none tracking-tight sm:text-6xl '>
+      <div className="flex flex-wrap gap-2 sm:gap-x-6 items-center justify-center">
+        <h1 className="text-4xl font-bold leading-none tracking-tight sm:text-6xl ">
           We love
         </h1>
-        <div className='stats bg-primary shadow'>
-          <div className='stat'>
-            <div className='stat-title text-primary-content text-4xl font-bold tracking-widest'>
+        <div className="stats bg-primary shadow">
+          <div className="stat">
+            <div className="stat-title text-primary-content text-4xl font-bold tracking-widest">
               comfy
             </div>
           </div>
         </div>
       </div>
-      <p className='mt-6 text-lg leading-8 max-w-2xl mx-auto'>
+      <p className="mt-6 text-lg leading-8 max-w-2xl mx-auto">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic veniam
         odit, officiis eos mollitia alias, doloremque, aspernatur ratione
         asperiores voluptas labore minus dolores reprehenderit corporis quos.
@@ -1096,31 +731,31 @@ import hero4 from '../assets/hero4.webp';
 const carouselImages = [hero1, hero2, hero3, hero4];
 const Hero = () => {
   return (
-    <div className=' grid grid-cols-1 lg:grid-cols-2 gap-24 items-center'>
+    <div className=" grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
       <div>
-        <h1 className='max-w-2xl text-4xl font-bold tracking-tight  sm:text-6xl '>
+        <h1 className="max-w-2xl text-4xl font-bold tracking-tight  sm:text-6xl ">
           We’re changing the way people shop.
         </h1>
 
-        <p className='mt-8 max-w-xl text-lg leading-8'>
+        <p className="mt-8 max-w-xl text-lg leading-8">
           Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem
           cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat
           aliqua. Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
           qui lorem cupidatat commodo.
         </p>
-        <div className='mt-10 '>
-          <Link to='products' className='btn btn-primary '>
+        <div className="mt-10 ">
+          <Link to="products" className="btn btn-primary ">
             Our Products
           </Link>
         </div>
       </div>
-      <div className='hidden  h-[28rem] lg:carousel carousel-center   p-4 space-x-4 bg-neutral rounded-box'>
+      <div className="hidden  h-[28rem] lg:carousel carousel-center   p-4 space-x-4 bg-neutral rounded-box">
         {carouselImages.map((image, index) => {
           return (
-            <div key={image} className='carousel-item'>
+            <div key={image} className="carousel-item">
               <img
                 src={image}
-                className='rounded-box h-full w-80  object-cover'
+                className="rounded-box h-full w-80  object-cover"
               />
             </div>
           );
@@ -1193,7 +828,7 @@ const ErrorElement = () => {
   const error = useRouteError();
   console.log(error);
 
-  return <h4 className='font-bold text-4xl'>there was an error... </h4>;
+  return <h4 className="font-bold text-4xl">there was an error... </h4>;
 };
 export default ErrorElement;
 ```
@@ -1333,8 +968,8 @@ SectionTitle.jsx
 ```js
 const SectionTitle = ({ text }) => {
   return (
-    <div className='border-b border-base-300 pb-5'>
-      <h2 className='text-3xl font-medium tracking-wider capitalize'>{text}</h2>
+    <div className="border-b border-base-300 pb-5">
+      <h2 className="text-3xl font-medium tracking-wider capitalize">{text}</h2>
     </div>
   );
 };
@@ -1348,8 +983,8 @@ import ProductsGrid from './ProductsGrid';
 import SectionTitle from './SectionTitle';
 const FeaturedProducts = () => {
   return (
-    <div className='pt-24 '>
-      <SectionTitle text='featured products' />
+    <div className="pt-24 ">
+      <SectionTitle text="featured products" />
       <ProductsGrid />
     </div>
   );
@@ -1365,7 +1000,7 @@ const ProductsGrid = () => {
   const { products } = useLoaderData();
 
   return (
-    <div className='pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3 '>
+    <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3 ">
       {products.map((product) => {
         const { title, price, image } = product.attributes;
         const dollarsAmount = price;
@@ -1373,18 +1008,18 @@ const ProductsGrid = () => {
           <Link
             key={product.id}
             to={`/products/${product.id}`}
-            className='card w-full  shadow-xl hover:shadow-2xl transition duration-300 '
+            className="card w-full  shadow-xl hover:shadow-2xl transition duration-300 "
           >
-            <figure className='px-4 pt-4'>
+            <figure className="px-4 pt-4">
               <img
                 src={image}
                 alt={title}
-                className='rounded-xl h-64 md:h-48 w-full object-cover'
+                className="rounded-xl h-64 md:h-48 w-full object-cover"
               />
             </figure>
-            <div className='card-body items-center text-center'>
-              <h2 className='card-title capitalize tracking-wider'>{title}</h2>
-              <span className='text-secondary'>{dollarsAmount}</span>
+            <div className="card-body items-center text-center">
+              <h2 className="card-title capitalize tracking-wider">{title}</h2>
+              <span className="text-secondary">{dollarsAmount}</span>
             </div>
           </Link>
         );
@@ -1514,46 +1149,46 @@ const SingleProduct = () => {
 
   return (
     <section>
-      <div className='text-md breadcrumbs'>
+      <div className="text-md breadcrumbs">
         <ul>
           <li>
-            <Link to='/'>Home</Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to='/products'>Products</Link>
+            <Link to="/products">Products</Link>
           </li>
         </ul>
       </div>
       {/* PRODUCT */}
-      <div className='mt-6 grid gap-y-8 lg:grid-cols-2  lg:gap-x-16'>
+      <div className="mt-6 grid gap-y-8 lg:grid-cols-2  lg:gap-x-16">
         {/* IMAGE */}
         <img
           src={image}
           alt={title}
-          className='w-96 h-96 object-cover rounded-lg lg:w-full  '
+          className="w-96 h-96 object-cover rounded-lg lg:w-full  "
         />
         {/* PRODUCT INFO */}
         <div>
-          <h1 className='capitalize text-3xl font-bold'>{title}</h1>
-          <h4 className='text-xl text-neutral-content font-bold mt-2'>
+          <h1 className="capitalize text-3xl font-bold">{title}</h1>
+          <h4 className="text-xl text-neutral-content font-bold mt-2">
             {company}
           </h4>
 
-          <p className='mt-3 text-xl'>{dollarsAmount}</p>
+          <p className="mt-3 text-xl">{dollarsAmount}</p>
 
-          <p className='mt-6 leading-8'>{description}</p>
+          <p className="mt-6 leading-8">{description}</p>
 
           {/* COLORS */}
-          <div className='mt-6'>
-            <h4 className='text-md font-medium tracking-wider capitalize'>
+          <div className="mt-6">
+            <h4 className="text-md font-medium tracking-wider capitalize">
               colors
             </h4>
-            <div className='mt-2'>
+            <div className="mt-2">
               {colors.map((color) => {
                 return (
                   <button
                     key={color}
-                    type='button'
+                    type="button"
                     className={`badge  w-6 h-6 mr-2  ${
                       color === productColor && 'border-2 border-secondary'
                     }`}
@@ -1565,14 +1200,14 @@ const SingleProduct = () => {
             </div>
           </div>
           {/* AMOUNT */}
-          <div className='form-control w-full max-w-xs'>
-            <label className='label'>
-              <h4 className='text-md font-medium tracking-wider capitalize'>
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <h4 className="text-md font-medium tracking-wider capitalize">
                 amount
               </h4>
             </label>
             <select
-              className='select select-secondary select-bordered select-md'
+              className="select select-secondary select-bordered select-md"
               value={amount}
               onChange={handleAmount}
             >
@@ -1582,9 +1217,9 @@ const SingleProduct = () => {
             </select>
           </div>
           {/* CART BUTTON */}
-          <div className='mt-10 '>
+          <div className="mt-10 ">
             <button
-              className='btn btn-secondary btn-md'
+              className="btn btn-secondary btn-md"
               onClick={() => console.log('add to bag')}
             >
               Add to bag
@@ -1807,7 +1442,7 @@ import { Link, useLoaderData } from 'react-router-dom';
 const ProductList = () => {
   const { products } = useLoaderData();
   return (
-    <div className='mt-12 grid gap-y-8'>
+    <div className="mt-12 grid gap-y-8">
       {products.map((product) => {
         const { title, price, image, company } = product.attributes;
         const dollarsAmount = formatPrice(price);
@@ -1816,23 +1451,23 @@ const ProductList = () => {
           <Link
             key={product.id}
             to={`/products/${product.id}`}
-            className='p-8 rounded-lg flex flex-col sm:flex-row gap-y-4 flex-wrap bg-base-100 shadow-xl hover:shadow-2xl duration-300 group'
+            className="p-8 rounded-lg flex flex-col sm:flex-row gap-y-4 flex-wrap bg-base-100 shadow-xl hover:shadow-2xl duration-300 group"
           >
             <img
               src={image}
               alt={title}
-              className='h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover group-hover:scale-105 transition duration-300'
+              className="h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover group-hover:scale-105 transition duration-300"
             />
-            <div className='ml-0 sm:ml-16'>
-              <h3 className='capitalize font-medium text-lg'>{title}</h3>
-              <h4 className='capitalize text-md text-neutral-content'>
+            <div className="ml-0 sm:ml-16">
+              <h3 className="capitalize font-medium text-lg">{title}</h3>
+              <h4 className="capitalize text-md text-neutral-content">
                 {company}
               </h4>
 
               {/* COLOR */}
             </div>
 
-            <p className='font-medium ml-0 sm:ml-auto text-lg'>
+            <p className="font-medium ml-0 sm:ml-auto text-lg">
               {dollarsAmount}
             </p>
           </Link>
@@ -1870,11 +1505,11 @@ const ProductsContainer = () => {
   return (
     <>
       {/* HEADER */}
-      <div className='flex justify-between items-center mt-8 border-b border-base-300 pb-5'>
-        <h4 className='font-medium text-md'>
+      <div className="flex justify-between items-center mt-8 border-b border-base-300 pb-5">
+        <h4 className="font-medium text-md">
           {totalProducts} product{totalProducts > 1 && 's'}
         </h4>
-        <div className='flex gap-x-2'>
+        <div className="flex gap-x-2">
           <button
             onClick={() => setLayout('grid')}
             className={setActiveStyles('grid')}
@@ -1894,7 +1529,7 @@ const ProductsContainer = () => {
       {/* PRODUCTS */}
       <div>
         {totalProducts === 0 ? (
-          <h5 className='text-2xl mt-16'>
+          <h5 className="text-2xl mt-16">
             Sorry, no products matched your search...
           </h5>
         ) : layout === 'grid' ? (
@@ -1922,9 +1557,9 @@ FormInput.jsx
 ```js
 const FormInput = ({ label, name, type, defaultValue, size }) => {
   return (
-    <div className='form-control'>
-      <label htmlFor={name} className='label'>
-        <span className='label-text capitalize'>{label}</span>
+    <div className="form-control">
+      <label htmlFor={name} className="label">
+        <span className="label-text capitalize">{label}</span>
       </label>
       <input
         type={type}
@@ -1946,19 +1581,19 @@ import FormInput from './FormInput';
 
 const Filters = () => {
   return (
-    <Form className='bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center'>
+    <Form className="bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center">
       {/* SEARCH */}
       <FormInput
-        type='search'
-        label='search product'
-        name='search'
-        size='input-sm'
+        type="search"
+        label="search product"
+        name="search"
+        size="input-sm"
       />
       {/* BUTTONS */}
-      <button type='submit' className='btn btn-primary btn-sm '>
+      <button type="submit" className="btn btn-primary btn-sm ">
         search
       </button>
-      <Link to='/products' className='btn btn-accent btn-sm'>
+      <Link to="/products" className="btn btn-accent btn-sm">
         reset
       </Link>
     </Form>
@@ -2014,9 +1649,9 @@ FormSelect.jsx
 ```js
 const FormSelect = ({ label, name, list, defaultValue, size }) => {
   return (
-    <div className='form-control'>
-      <label htmlFor={name} className='label'>
-        <span className='label-text capitalize'>{label}</span>
+    <div className="form-control">
+      <label htmlFor={name} className="label">
+        <span className="label-text capitalize">{label}</span>
       </label>
       <select
         name={name}
@@ -2047,28 +1682,28 @@ const { meta } = useLoaderData();
   /* CATEGORIES */
 }
 <FormSelect
-  label='select category'
-  name='category'
+  label="select category"
+  name="category"
   list={meta.categories}
-  size='select-sm'
+  size="select-sm"
 />;
 {
   /* COMPANIES */
 }
 <FormSelect
-  label='select company'
-  name='company'
+  label="select company"
+  name="company"
   list={meta.companies}
-  size='select-sm'
+  size="select-sm"
 />;
 {
   /* ORDER */
 }
 <FormSelect
-  label='sort by'
-  name='order'
+  label="sort by"
+  name="order"
   list={['a-z', 'z-a', 'high', 'low']}
-  size='select-sm'
+  size="select-sm"
 />;
 ```
 
@@ -2128,13 +1763,13 @@ const FormRange = ({ label, name, size }) => {
   const [selectedPrice, setSelectedPrice] = useState(maxPrice);
 
   return (
-    <div className='form-control'>
-      <label htmlFor={name} className='label cursor-pointer'>
-        <span className='label-text capitalize'>{label}</span>
+    <div className="form-control">
+      <label htmlFor={name} className="label cursor-pointer">
+        <span className="label-text capitalize">{label}</span>
         <span>{formatPrice(selectedPrice)}</span>
       </label>
       <input
-        type='range'
+        type="range"
         name={name}
         min={0}
         max={maxPrice}
@@ -2143,9 +1778,9 @@ const FormRange = ({ label, name, size }) => {
         className={`range range-primary ${size}`}
         step={step}
       />
-      <div className='w-full flex justify-between text-xs px-2 mt-2'>
-        <span className='font-bold text-md'>0</span>
-        <span className='font-bold text-md'>Max : {formatPrice(maxPrice)}</span>
+      <div className="w-full flex justify-between text-xs px-2 mt-2">
+        <span className="font-bold text-md">0</span>
+        <span className="font-bold text-md">Max : {formatPrice(maxPrice)}</span>
       </div>
     </div>
   );
@@ -2159,7 +1794,7 @@ Filters.jsx
 {
   /* PRICE */
 }
-<FormRange label='select price' name='price' size='range-sm' />;
+<FormRange label="select price" name="price" size="range-sm" />;
 ```
 
 ## Challenge (28) - Filters (Shipping)
@@ -2206,12 +1841,12 @@ FormCheckbox.jsx
 ```js
 const FormCheckbox = ({ label, name, defaultValue, size }) => {
   return (
-    <div className='form-control items-center'>
-      <label htmlFor={name} className='label cursor-pointer'>
-        <span className='label-text capitalize'>{label}</span>
+    <div className="form-control items-center">
+      <label htmlFor={name} className="label cursor-pointer">
+        <span className="label-text capitalize">{label}</span>
       </label>
       <input
-        type='checkbox'
+        type="checkbox"
         name={name}
         defaultChecked={defaultValue}
         className={`checkbox checkbox-primary ${size}`}
@@ -2228,7 +1863,7 @@ Filters.jsx
 {
   /* SHIPPING */
 }
-<FormCheckbox label='free shipping' name='shipping' size='checkbox-sm' />;
+<FormCheckbox label="free shipping" name="shipping" size="checkbox-sm" />;
 ```
 
 ## Challenge (29) - Global Loading
@@ -2303,8 +1938,8 @@ Loading.jsx
 ```js
 const Loading = () => {
   return (
-    <div className='h-screen flex items-center justify-center'>
-      <span className='loading loading-ring loading-lg' />
+    <div className="h-screen flex items-center justify-center">
+      <span className="loading loading-ring loading-lg" />
     </div>
   );
 };
@@ -2324,7 +1959,7 @@ const HomeLayout = () => {
       {isPageLoading ? (
         <Loading />
       ) : (
-        <section className='align-element py-20'>
+        <section className="align-element py-20">
           <Outlet />
         </section>
       )}
@@ -2375,58 +2010,58 @@ const Filters = () => {
   const { meta, params } = useLoaderData();
   const { search, company, category, shipping, order, price } = params;
   return (
-    <Form className='bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center'>
+    <Form className="bg-base-200 rounded-md px-8 py-4 grid gap-x-4 gap-y-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center">
       {/* SEARCH */}
       <FormInput
-        type='search'
-        label='search product'
-        name='search'
+        type="search"
+        label="search product"
+        name="search"
         defaultValue={search}
-        size='input-sm'
+        size="input-sm"
       />
       {/* CATEGORIES */}
       <FormSelect
-        label='select category'
-        name='category'
+        label="select category"
+        name="category"
         list={meta.categories}
         defaultValue={category}
-        size='select-sm'
+        size="select-sm"
       />
       {/* COMPANIES */}
       <FormSelect
-        label='select company'
-        name='company'
+        label="select company"
+        name="company"
         list={meta.companies}
         defaultValue={company}
-        size='select-sm'
+        size="select-sm"
       />
       {/* ORDER */}
       <FormSelect
-        label='sort by'
-        name='order'
+        label="sort by"
+        name="order"
         list={['a-z', 'z-a', 'high', 'low']}
         defaultValue={order}
-        size='select-sm'
+        size="select-sm"
       />
       {/* PRICE */}
       <FormRange
-        label='select price'
-        name='price'
+        label="select price"
+        name="price"
         price={price}
-        size='range-sm'
+        size="range-sm"
       />
       {/* SHIPPING */}
       <FormCheckbox
-        label='free shipping'
-        name='shipping'
+        label="free shipping"
+        name="shipping"
         defaultValue={shipping}
-        size='checkbox-sm'
+        size="checkbox-sm"
       />
       {/* BUTTONS */}
-      <button type='submit' className='btn btn-primary btn-sm'>
+      <button type="submit" className="btn btn-primary btn-sm">
         search
       </button>
-      <Link to='/products' className='btn btn-accent btn-sm'>
+      <Link to="/products" className="btn btn-accent btn-sm">
         reset
       </Link>
     </Form>
@@ -2533,10 +2168,10 @@ const PaginationContainer = () => {
   if (pageCount < 2) return null;
 
   return (
-    <div className='mt-16 flex justify-end'>
-      <div className='join'>
+    <div className="mt-16 flex justify-end">
+      <div className="join">
         <button
-          className='btn btn-xs sm:btn-md join-item'
+          className="btn btn-xs sm:btn-md join-item"
           onClick={() => {
             let prevPage = page - 1;
             if (prevPage < 1) prevPage = pageCount;
@@ -2559,7 +2194,7 @@ const PaginationContainer = () => {
           );
         })}
         <button
-          className='btn btn-xs sm:btn-md join-item'
+          className="btn btn-xs sm:btn-md join-item"
           onClick={() => {
             let nextPage = page + 1;
             if (nextPage > pageCount) nextPage = 1;
@@ -2689,7 +2324,7 @@ import { Provider } from 'react-redux';
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
-    <ToastContainer position='top-center' />
+    <ToastContainer position="top-center" />
   </Provider>
 );
 ```
@@ -2726,8 +2361,8 @@ const SingleProduct = () => {
     <section>
       ....
       {/* CART BUTTON */}
-      <div className='mt-10 '>
-        <button className='btn btn-secondary btn-md' onClick={addToCart}>
+      <div className="mt-10 ">
+        <button className="btn btn-secondary btn-md" onClick={addToCart}>
           Add to bag
         </button>
       </div>
@@ -3112,23 +2747,23 @@ const Cart = () => {
   const user = null;
   const numItemsInCart = useSelector((state) => state.cartState.numItemsInCart);
   if (numItemsInCart === 0) {
-    return <SectionTitle text='Your cart is empty' />;
+    return <SectionTitle text="Your cart is empty" />;
   }
   return (
     <>
-      <SectionTitle text='Shopping Cart' />
-      <div className='mt-8 grid gap-8  lg:grid-cols-12'>
-        <div className='lg:col-span-8'>
+      <SectionTitle text="Shopping Cart" />
+      <div className="mt-8 grid gap-8  lg:grid-cols-12">
+        <div className="lg:col-span-8">
           <CartItemsList />
         </div>
-        <div className='lg:col-span-4 lg:pl-4'>
+        <div className="lg:col-span-4 lg:pl-4">
           <CartTotals />
           {user ? (
-            <Link to='/checkout' className='btn btn-primary btn-block mt-8'>
+            <Link to="/checkout" className="btn btn-primary btn-block mt-8">
               Proceed to checkout
             </Link>
           ) : (
-            <Link to='/login' className='btn btn-primary btn-block mt-8'>
+            <Link to="/login" className="btn btn-primary btn-block mt-8">
               please login
             </Link>
           )}
@@ -3189,27 +2824,27 @@ const CartTotals = () => {
   );
 
   return (
-    <div className='card bg-base-200'>
-      <div className='card-body'>
+    <div className="card bg-base-200">
+      <div className="card-body">
         {/* SUBTOTAL */}
-        <p className='flex justify-between text-xs border-b border-base-300 pb-2'>
+        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
           <span>Subtotal</span>
-          <span className='font-medium'>{formatPrice(cartTotal)}</span>
+          <span className="font-medium">{formatPrice(cartTotal)}</span>
         </p>
         {/* SHIPPING */}
-        <p className='flex justify-between text-xs border-b border-base-300 pb-2'>
+        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
           <span>Shipping</span>
-          <span className='font-medium'>{formatPrice(shipping)}</span>
+          <span className="font-medium">{formatPrice(shipping)}</span>
         </p>
         {/* Tax */}
-        <p className='flex justify-between text-xs border-b border-base-300 pb-2'>
+        <p className="flex justify-between text-xs border-b border-base-300 pb-2">
           <span>Tax</span>
-          <span className='font-medium'>{formatPrice(tax)}</span>
+          <span className="font-medium">{formatPrice(tax)}</span>
         </p>
         {/* Total */}
-        <p className='mt-4 flex justify-between text-sm  pb-2'>
-          <span className='font-bold'>Order Total</span>
-          <span className='font-bold'>{formatPrice(orderTotal)}</span>
+        <p className="mt-4 flex justify-between text-sm  pb-2">
+          <span className="font-bold">Order Total</span>
+          <span className="font-bold">{formatPrice(orderTotal)}</span>
         </p>
       </div>
     </div>
@@ -3334,41 +2969,41 @@ const CartItem = ({ cartItem }) => {
   return (
     <article
       key={cartID}
-      className='mb-12 flex flex-col gap-y-4 sm:flex-row flex-wrap border-b border-base-300 pb-6 last:border-b-0'
+      className="mb-12 flex flex-col gap-y-4 sm:flex-row flex-wrap border-b border-base-300 pb-6 last:border-b-0"
     >
       {/* IMAGE */}
       <img
         src={image}
         alt={title}
-        className='h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover'
+        className="h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover"
       />
       {/* INFO */}
-      <div className='sm:ml-16 sm:w-48'>
+      <div className="sm:ml-16 sm:w-48">
         {/* TITLE */}
-        <h3 className='capitalize font-medium'>{title}</h3>
+        <h3 className="capitalize font-medium">{title}</h3>
         {/* COMPANY */}
-        <h4 className='mt-2 capitalize text-sm text-neutral-content'>
+        <h4 className="mt-2 capitalize text-sm text-neutral-content">
           {company}
         </h4>
         {/* COLOR */}
-        <p className='mt-4 text-sm capitalize flex items-center gap-x-2'>
+        <p className="mt-4 text-sm capitalize flex items-center gap-x-2">
           color :
           <span
-            className='badge badge-sm'
+            className="badge badge-sm"
             style={{ backgroundColor: productColor }}
           ></span>
         </p>
       </div>
-      <div className='sm:ml-12'>
+      <div className="sm:ml-12">
         {/* AMOUNT */}
-        <div className='form-control max-w-xs'>
-          <label htmlFor='amount' className='label p-0'>
-            <span className='label-text'>Amount</span>
+        <div className="form-control max-w-xs">
+          <label htmlFor="amount" className="label p-0">
+            <span className="label-text">Amount</span>
           </label>
           <select
-            name='amount'
-            id='amount'
-            className='mt-2 select select-base select-bordered select-xs'
+            name="amount"
+            id="amount"
+            className="mt-2 select select-base select-bordered select-xs"
             value={amount}
             onChange={handleAmount}
           >
@@ -3377,7 +3012,7 @@ const CartItem = ({ cartItem }) => {
         </div>
         {/* REMOVE */}
         <button
-          className='mt-2 link link-primary link-hover text-sm'
+          className="mt-2 link link-primary link-hover text-sm"
           onClick={removeItemFromTheCart}
         >
           remove
@@ -3385,7 +3020,7 @@ const CartItem = ({ cartItem }) => {
       </div>
 
       {/* PRICE */}
-      <p className='font-medium sm:ml-auto'>{formatPrice(price)}</p>
+      <p className="font-medium sm:ml-auto">{formatPrice(price)}</p>
     </article>
   );
 };
@@ -3395,7 +3030,7 @@ export default CartItem;
 CartItem.jsx
 
 ```js
-<div className='sm:ml-12'>
+<div className="sm:ml-12">
   {/* AMOUNT */}
   {/* REMOVE */}
 </div>
@@ -3562,51 +3197,51 @@ const Navbar = () => {
     dispatch(toggleTheme());
   };
   return (
-    <nav className='bg-base-200'>
-      <div className='navbar align-element '>
-        <div className='navbar-start'>
+    <nav className="bg-base-200">
+      <div className="navbar align-element ">
+        <div className="navbar-start">
           {/* Title */}
           <NavLink
-            to='/'
-            className='hidden lg:flex btn btn-primary text-3xl items-center '
+            to="/"
+            className="hidden lg:flex btn btn-primary text-3xl items-center "
           >
             C
           </NavLink>
           {/* DROPDOWN */}
-          <div className='dropdown'>
-            <label tabIndex={0} className='btn btn-ghost lg:hidden'>
-              <FaBarsStaggered className='h-6 w-6' />
+          <div className="dropdown">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+              <FaBarsStaggered className="h-6 w-6" />
             </label>
             <ul
               tabIndex={0}
-              className='menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52'
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52"
             >
               <NavLinks />
             </ul>
           </div>
         </div>
-        <div className='navbar-center hidden lg:flex'>
-          <ul className='menu menu-horizontal '>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal ">
             <NavLinks />
           </ul>
         </div>
-        <div className='navbar-end'>
+        <div className="navbar-end">
           {/* THEME ICONS */}
-          <label className='swap swap-rotate '>
+          <label className="swap swap-rotate ">
             {/* this hidden checkbox controls the state */}
-            <input type='checkbox' onChange={handleTheme} />
+            <input type="checkbox" onChange={handleTheme} />
 
             {/* sun icon */}
-            <BsSunFill className='swap-on h-4 w-4' />
+            <BsSunFill className="swap-on h-4 w-4" />
 
             {/* moon icon */}
-            <BsMoonFill className='swap-off h-4 w-4' />
+            <BsMoonFill className="swap-off h-4 w-4" />
           </label>
           {/* CART LINK*/}
-          <NavLink to='cart' className='btn btn-ghost btn-circle btn-md ml-4'>
-            <div className='indicator'>
-              <BsCart3 className='h-6 w-6' />
-              <span className='badge badge-sm badge-primary indicator-item'>
+          <NavLink to="cart" className="btn btn-ghost btn-circle btn-md ml-4">
+            <div className="indicator">
+              <BsCart3 className="h-6 w-6" />
+              <span className="badge badge-sm badge-primary indicator-item">
                 {numItemsInCart}
               </span>
             </div>
@@ -3655,24 +3290,24 @@ const Header = () => {
     dispatch(logoutUser());
   };
   return (
-    <header className=' bg-neutral py-2 text-neutral-content '>
-      <div className='align-element flex justify-center sm:justify-end '>
+    <header className=" bg-neutral py-2 text-neutral-content ">
+      <div className="align-element flex justify-center sm:justify-end ">
         {user ? (
-          <div className='flex gap-x-2 sm:gap-x-8 items-center'>
-            <p className='text-xs sm:text-sm'>Hello, {user.username}</p>
+          <div className="flex gap-x-2 sm:gap-x-8 items-center">
+            <p className="text-xs sm:text-sm">Hello, {user.username}</p>
             <button
-              className='btn btn-xs btn-outline btn-primary '
+              className="btn btn-xs btn-outline btn-primary "
               onClick={handleLogout}
             >
               logout
             </button>
           </div>
         ) : (
-          <div className='flex gap-x-6 justify-center items-center'>
-            <Link to='/login' className='link link-hover text-xs sm:text-sm'>
+          <div className="flex gap-x-6 justify-center items-center">
+            <Link to="/login" className="link link-hover text-xs sm:text-sm">
               Sign in / Guest
             </Link>
-            <Link to='/register' className='link link-hover text-xs sm:text-sm'>
+            <Link to="/register" className="link link-hover text-xs sm:text-sm">
               Create an Account
             </Link>
           </div>
@@ -3700,7 +3335,7 @@ const NavLinks = () => {
         if ((url === 'checkout' || url === 'orders') && !user) return null;
         return (
           <li key={id}>
-            <NavLink className='capitalize' to={url}>
+            <NavLink className="capitalize" to={url}>
               {text}
             </NavLink>
           </li>
@@ -3783,24 +3418,24 @@ export const action = async ({ request }) => {
 
 const Register = () => {
   return (
-    <section className='h-screen grid place-items-center'>
+    <section className="h-screen grid place-items-center">
       <Form
-        method='POST'
-        className='card w-96 py-8 px-8 bg-base-100 shadow-lg flex flex-col gap-y-4'
+        method="POST"
+        className="card w-96 py-8 px-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
       >
-        <h4 className='text-center text-3xl font-bold'>Register</h4>
-        <FormInput type='text' label='username' name='username' />
-        <FormInput type='email' label='email' name='email' />
-        <FormInput type='password' label='password' name='password' />
-        <div className='mt-4'>
-          <SubmitBtn text='register' />
+        <h4 className="text-center text-3xl font-bold">Register</h4>
+        <FormInput type="text" label="username" name="username" />
+        <FormInput type="email" label="email" name="email" />
+        <FormInput type="password" label="password" name="password" />
+        <div className="mt-4">
+          <SubmitBtn text="register" />
         </div>
 
-        <p className='text-center'>
+        <p className="text-center">
           Already a member?
           <Link
-            to='/login'
-            className='ml-2 link link-hover link-primary capitalize'
+            to="/login"
+            className="ml-2 link link-hover link-primary capitalize"
           >
             login
           </Link>
@@ -3985,8 +3620,8 @@ const Login = () => {
 };
 
 <button
-  type='button'
-  className='btn btn-secondary btn-block'
+  type="button"
+  className="btn btn-secondary btn-block"
   onClick={loginAsGuestUser}
 >
   guest user
@@ -4027,12 +3662,12 @@ import { CheckoutForm, SectionTitle, CartTotals } from '../components';
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cartState.cartTotal);
   if (cartTotal.length === 0) {
-    return <SectionTitle text='Your cart is empty' />;
+    return <SectionTitle text="Your cart is empty" />;
   }
   return (
     <>
-      <SectionTitle text='Place your order' />
-      <div className='mt-8 grid gap-8  md:grid-cols-2 items-start'>
+      <SectionTitle text="Place your order" />
+      <div className="mt-8 grid gap-8  md:grid-cols-2 items-start">
         <CheckoutForm />
         <CartTotals />
       </div>
@@ -4239,12 +3874,12 @@ export const action =
   };
 const CheckoutForm = () => {
   return (
-    <Form method='POST' className='flex flex-col gap-y-4'>
-      <h4 className='font-medium text-xl'>Shipping Information</h4>
-      <FormInput label='first name' name='name' type='text' />
-      <FormInput label='address' name='address' type='text' />
-      <div className='mt-4'>
-        <SubmitBtn text='Place Your Order' />
+    <Form method="POST" className="flex flex-col gap-y-4">
+      <h4 className="font-medium text-xl">Shipping Information</h4>
+      <FormInput label="first name" name="name" type="text" />
+      <FormInput label="address" name="address" type="text" />
+      <div className="mt-4">
+        <SubmitBtn text="Place Your Order" />
       </div>
     </Form>
   );
@@ -4380,7 +4015,7 @@ export const loader =
     }
   };
 const Orders = () => {
-  return <h1 className='text-3xl'>orders</h1>;
+  return <h1 className="text-3xl">orders</h1>;
 };
 export default Orders;
 ```
@@ -4448,11 +4083,11 @@ Orders.jsx
 const Orders = () => {
   const { meta } = useLoaderData();
   if (meta.pagination.total < 1) {
-    return <SectionTitle text='Please make an order' />;
+    return <SectionTitle text="Please make an order" />;
   }
   return (
     <>
-      <SectionTitle text='Your Orders' />
+      <SectionTitle text="Your Orders" />
       <OrdersList />
       <PaginationContainer />
     </>
@@ -4472,12 +4107,12 @@ day.extend(advancedFormat);
 const OrdersList = () => {
   const { orders, meta } = useLoaderData();
   return (
-    <div className='mt-8'>
-      <h4 className='mb-4 capitalize'>
+    <div className="mt-8">
+      <h4 className="mb-4 capitalize">
         total orders : {meta.pagination.total}
       </h4>
-      <div className='overflow-x-auto '>
-        <table className='table table-zebra'>
+      <div className="overflow-x-auto ">
+        <table className="table table-zebra">
           {/* head */}
           <thead>
             <tr>
@@ -4485,7 +4120,7 @@ const OrdersList = () => {
               <th>Address</th>
               <th>Products</th>
               <th>Cost</th>
-              <th className='hidden sm:block'>Date</th>
+              <th className="hidden sm:block">Date</th>
             </tr>
           </thead>
           <tbody>
@@ -4501,7 +4136,7 @@ const OrdersList = () => {
                   <td>{address}</td>
                   <td>{numItemsInCart}</td>
                   <td>{orderTotal}</td>
-                  <td className='hidden sm:block'>{date}</td>
+                  <td className="hidden sm:block">{date}</td>
                 </tr>
               );
             })}
@@ -4585,7 +4220,7 @@ const ComplexPaginationContainer = () => {
     // dots
     if (page > 2) {
       pageButtons.push(
-        <button className='join-item btn btn-xs sm:btn-md' key='dots-1'>
+        <button className="join-item btn btn-xs sm:btn-md" key="dots-1">
           ...
         </button>
       );
@@ -4598,7 +4233,7 @@ const ComplexPaginationContainer = () => {
     // dots
     if (page < pageCount - 1) {
       pageButtons.push(
-        <button className='join-item btn btn-xs sm:btn-md' key='dots-2'>
+        <button className="join-item btn btn-xs sm:btn-md" key="dots-2">
           ...
         </button>
       );
@@ -4614,10 +4249,10 @@ const ComplexPaginationContainer = () => {
   if (pageCount < 2) return null;
 
   return (
-    <div className='mt-16 flex justify-end'>
-      <div className='join'>
+    <div className="mt-16 flex justify-end">
+      <div className="join">
         <button
-          className='btn btn-xs sm:btn-md join-item'
+          className="btn btn-xs sm:btn-md join-item"
           onClick={() => {
             let prevPage = page - 1;
             if (prevPage < 1) prevPage = pageCount;
@@ -4628,7 +4263,7 @@ const ComplexPaginationContainer = () => {
         </button>
         {renderPageButtons()}
         <button
-          className='btn btn-xs sm:btn-md join-item'
+          className="btn btn-xs sm:btn-md join-item"
           onClick={() => {
             let nextPage = page + 1;
             if (nextPage > pageCount) nextPage = 1;
@@ -4897,11 +4532,11 @@ const Orders = () => {
   const { meta } = useLoaderData();
 
   if (meta.pagination.total < 1) {
-    return <SectionTitle text='Please make an order' />;
+    return <SectionTitle text="Please make an order" />;
   }
   return (
     <>
-      <SectionTitle text='Your Orders' />
+      <SectionTitle text="Your Orders" />
       <OrdersList />
       <ComplexPaginationContainer />
     </>
