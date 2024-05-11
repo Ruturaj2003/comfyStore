@@ -2,8 +2,13 @@ import { BsCart3, BsMoonFill, BsSunFill } from 'react-icons/bs';
 import { FaBarsStaggered } from 'react-icons/fa6';
 import { NavLink } from 'react-router-dom';
 import NavLinks from './NavLinks';
+import { useState } from 'react';
 
 const Navbar = () => {
+  const [theme, setTheme] = useState(false);
+  const handleTheme = () => {
+    setTheme(!theme);
+  };
   return (
     <nav>
       <div className="navbar align-elements">
@@ -35,6 +40,15 @@ const Navbar = () => {
         </div>
         <div className="navbar-end">
           {/* Theme Setup */}
+          <label className="swap swap-flip">
+            <input type="checkbox" onChange={handleTheme} />
+
+            {/* Sun */}
+            <BsSunFill className="swap-on h-4 w-4"></BsSunFill>
+
+            <BsMoonFill className="swap-off h-4 w-4"></BsMoonFill>
+          </label>
+
           {/* Cart Link */}
           <NavLink
             to={'/cart'}
