@@ -1,4 +1,10 @@
+import { Hero } from '../components';
+
 const Landing = () => {
-  return <div>Landing</div>;
+  return (
+    <>
+      <Hero></Hero>
+    </>
+  );
 };
 export default Landing;
