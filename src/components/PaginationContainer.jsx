@@ -8,14 +8,25 @@ const PaginationContainer = () => {
     return index + 1;
   });
 
-  const handlePageChange = (pageNumber) => {};
+  const { search, pathname } = useLocation();
+  const navi = useNavigate();
+
+  const handlePageChange = (pageNumber) => {
+    const searchParams = new URLSearchParams(search);
+    searchParams.set('page', pageNumber);
+    navi(`${pathname}?${searchParams.toString()}`);
+  };
   if (pageCount < 2) return null;
 
   return (
     <div className="mt-16 flex justify-end">
       <div className="join">
         <button
-          onClick={() => handlePageChange('prev')}
+          onClick={() => {
+            let prevPage = page - 1;
+            if (prevPage < 1) prevPage = pageCount;
+            handlePageChange(prevPage);
+          }}
           className="btn btn-xs sm:btn-md join-item"
         >
           {'Prev'}
@@ -34,7 +45,11 @@ const PaginationContainer = () => {
           );
         })}
         <button
-          onClick={() => handlePageChange(next)}
+          onClick={() => {
+            let prevPage = page + 1;
+            if (prevPage > pageCount) prevPage = pageCount;
+            handlePageChange(prevPage);
+          }}
           className="btn btn-xs sm:btn-md join-item"
         >
           {'Next'}
