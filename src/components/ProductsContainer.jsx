@@ -49,8 +49,6 @@ const ProductsContainer = () => {
           <ProductsList></ProductsList>
         )}
       </div>
-      <ProductsList></ProductsList>
-      <ProductsGrid></ProductsGrid>
     </>
   );
 };
