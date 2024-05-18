@@ -35,9 +35,33 @@ const cartSlice = createSlice({
       cartSlice.caseReducers.calculateTotals(state);
       toast.success('Items Added');
     },
-    removeItem: (state, action) => console.log(action.payload),
-    editItem: (state, action) => console.log(action.payload),
-    clearCart: (state) => {},
+    removeItem: (state, action) => {
+      const { cartID } = action.payload;
+      const product = state.cartItems.find((i) => i.cartID === cartID);
+      state.cartItems = state.cartItems.filter((i) => i.cartId !== cartID);
+
+      state.numItemsInCart -= product.amount;
+      state.cartTotal -= product.price * product.amount;
+      cartSlice.caseReducers.calculateTotals(state);
+
+      toast.error('Item :' + product.title + ' Removed form cart');
+    },
+    editItem: (state, action) => {
+      const { cartID, amount } = action.payload;
+
+      const item = state.cartItems.find((i) => i.cartID === cartID);
+      state.numItemsInCart += amount - item.amount;
+      state.cartTotal += item.price * (amount - item.amount);
+
+      item.amount = amount;
+      cartSlice.caseReducers.calculateTotals(state);
+      toast.success('Cart Updated');
+    },
+    clearCart: (state) => {
+      localStorage.setItem('cart', JSON.stringify(defaultState));
+
+      return defaultState;
+    },
   },
 
   calculateTotals: (state) => {
