@@ -62,13 +62,12 @@ const cartSlice = createSlice({
 
       return defaultState;
     },
-  },
+    calculateTotals: (state) => {
+      state.tax = 0.18 * state.cartTotal;
+      state.orderTotal = state.cartTotal + state.shipping + state.tax;
 
-  calculateTotals: (state) => {
-    state.tax = 0.18 * state.cartTotal;
-    state.orderTotal = state.cartTotal + state.shipping + state.tax;
-
-    localStorage.setItem('cart', JSON.stringify(state));
+      localStorage.setItem('cart', JSON.stringify(state));
+    },
   },
 });
 
