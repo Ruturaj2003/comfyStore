@@ -10,8 +10,8 @@ const links = [
   { id: 6, url: 'orders', text: 'orders' },
 ];
 
-const user = useSelector((state) => state.userState.user);
 const NavLinks = () => {
+  const user = useSelector((state) => state.userState.user);
   return (
     <>
       {links.map((link) => {
