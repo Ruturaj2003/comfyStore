@@ -1,27 +1,3 @@
-## Challenge (50) - Auth Error
-
-- handle auth errors
-- check for response.status
-  - if status === 401 redirect to login
-
-## Solution (50) - Auth Error
-
-CheckoutForm.jsx
-
-```js
-
- catch (error) {
-  console.log(error);
-  const errorMessage =
-    error?.response?.data?.error?.message ||
-    'there was an error placing your order';
-  toast.error(errorMessage);
-  if (error?.response?.status === 401 || 403) return redirect('/login');
-
-  return null;
-}
-```
-
 ## Challenge (51) - Orders Request Overview
 
 - [API DOCS](https://documenter.getpostman.com/view/18152321/2s9Xy5KpTi)
