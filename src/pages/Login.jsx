@@ -1,7 +1,56 @@
-import { Form, Link } from 'react-router-dom';
 import { FormInput, SubmitBtn } from '../components';
+import { Form, Link, redirect, useNavigate } from 'react-router-dom';
+import { customFetch } from '../utils';
+import { toast } from 'react-toastify';
+import { loginUser } from '../features/user/userSlice';
+import { useDispatch } from 'react-redux';
+
+// *** Higher Order Function
+// * an asynchronous function that takes an object with a property named `request`.
+
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+      console.log(data);
+      const resp = await customFetch.post('/auth/local', data);
+
+      store.dispatch(loginUser(resp.data));
+      toast.success('Login Successfull');
+      return redirect('/');
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error?.response?.data?.error?.message ||
+        'please double check your credentials';
+
+      toast.error(errorMessage);
+      return null;
+    }
+  };
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logInAsGuest = async () => {
+    try {
+      const resp = await customFetch.post('/auth/local', {
+        identifier: 'test@test.com',
+        password: 'secret',
+      });
+
+      dispatch(loginUser(resp.data));
+      toast.success('Welcome Guest User');
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+      toast.error('Guest User Login Error , Please Try Again Later');
+    }
+  };
+
   return (
     <section className="h-screen grid place-items-center">
       <Form
@@ -12,18 +61,20 @@ const Login = () => {
         <FormInput
           type={'email'}
           label={'email'}
-          name={'identitfier'}
-          defaultValue={'test@test.com'}
+          name={'identifier'}
         ></FormInput>
         <FormInput
           type={'password'}
           label={'password'}
           name={'password'}
-          defaultValue={'secret'}
         ></FormInput>
         <div className="mt-4">
           <SubmitBtn text={'Login'}></SubmitBtn>
-          <button type="button" className="btn  mt-6 btn-secondary btn-block">
+          <button
+            type="button"
+            onClick={logInAsGuest}
+            className="btn  mt-6 btn-secondary btn-block"
+          >
             Guest User
           </button>
           <p className="text-center">

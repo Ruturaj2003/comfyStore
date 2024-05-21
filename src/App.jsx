@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { store } from './store';
 import {
   About,
   Cart,
@@ -21,6 +22,7 @@ import { loader as productsLoader } from './pages/Products';
 
 // Actions
 import { action as registerAction } from './pages/Register';
+import { action as loginAction } from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +52,7 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
     errorElement: <Error />,
+    action: loginAction(store),
   },
   {
     path: '/register',
