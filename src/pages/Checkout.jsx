@@ -1,9 +1,21 @@
 import { useSelector } from 'react-redux';
 import { CheckoutForm, SectionTitle, CartTotals } from '../components';
+import { redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+export const loader = (store) => {
+  const user = store.getState().userState.user;
+
+  if (!user) {
+    toast.warn('You must be Logged In to Checkout');
+    return redirect('/login');
+  }
+  return null;
+};
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cartState.cartTotal);
-  if (cartTotal.length === 0) {
+  if (cartItems.length === 0) {
     return <SectionTitle text={'Your Cart is Empty '}></SectionTitle>;
   }
 
