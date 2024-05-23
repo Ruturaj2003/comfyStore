@@ -11,7 +11,7 @@ export const ordersQuery = (params, user) => {
       params.page ? parseInt(params.page) : 1,
     ],
     queryFn: () => {
-      customFetch.get('/orders', {
+      return customFetch.get('/orders', {
         params,
         headers: {
           Authorization: `Bearer ${user.token}`,
