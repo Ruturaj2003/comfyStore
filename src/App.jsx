@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { store } from './store';
 import {
   About,
@@ -27,6 +29,14 @@ import { action as registerAction } from './pages/Register';
 import { action as loginAction } from './pages/Login';
 import { action as checkOutAction } from './components/CheckoutForm';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -36,23 +46,31 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Landing />,
-        loader: landingLoader,
+        loader: landingLoader(queryClient),
         errorElement: <ErrorElement></ErrorElement>,
       },
-      { path: 'products', element: <Products />, loader: productsLoader },
+      {
+        path: 'products',
+        element: <Products />,
+        loader: productsLoader(queryClient),
+      },
       {
         path: 'products/:id',
         element: <SingleProduct />,
-        loader: singleProductLoader,
+        loader: singleProductLoader(queryClient),
       },
       { path: 'cart', element: <Cart /> },
       {
         path: 'checkout',
         element: <Checkout />,
         loader: checkoutLoader(store),
-        action: checkOutAction(store),
+        action: checkOutAction(store, queryClient),
       },
-      { path: 'orders', element: <Orders />, loader: orderLoader(store) },
+      {
+        path: 'orders',
+        element: <Orders />,
+        loader: orderLoader(store, queryClient),
+      },
       { path: 'about', element: <About /> },
     ],
   },
@@ -70,7 +88,11 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}></RouterProvider>;
+    </QueryClientProvider>
+  );
 }
 
 export default App;
