@@ -37,6 +37,17 @@ export const loader =
   };
 
 const Orders = () => {
-  return <div className="text-3xl font-medium">Orders</div>;
+  const { meta } = useLoaderData();
+  if (meta.pagination.total < 1) {
+    return <SectionTitle text={'Wow Such EMPTY'}></SectionTitle>;
+  }
+
+  return (
+    <>
+      <SectionTitle text={'Your Orders'}></SectionTitle>
+      <OrdersList></OrdersList>
+      <PaginationContainer></PaginationContainer>
+    </>
+  );
 };
 export default Orders;
